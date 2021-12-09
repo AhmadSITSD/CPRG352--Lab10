@@ -11,6 +11,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import models.User;
 
 /**
  *
@@ -27,12 +28,18 @@ public class AdminFilter implements Filter {
         HttpSession session = httpRequest.getSession();
        
         String privilege = (String) session.getAttribute("privilege");
+        User user = (User) session.getAttribute("user");
         if(privilege.equals("user")) {
             if (!privilege.equals("admin")){
             HttpServletResponse httpResponse = (HttpServletResponse) response;
             httpResponse.sendRedirect("notes");
             return;
+            }
         }
+        if (user.getRole().getRoleId() != 1) {
+            HttpServletResponse httpResponse = (HttpServletResponse) response;
+            httpResponse.sendRedirect("notes");
+            return;
         }
 
         // This will either call upon the next filter in the chain,
