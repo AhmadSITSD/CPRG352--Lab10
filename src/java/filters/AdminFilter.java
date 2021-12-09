@@ -21,16 +21,18 @@ public class AdminFilter implements Filter {
     
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        
+       
          // any code before chain.doFilter will be executed before the servlet is loaded
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpSession session = httpRequest.getSession();
        
-        String email = (String) session.getAttribute("email");
-        if(email == null) {
+        String privilege = (String) session.getAttribute("privilege");
+        if(privilege.equals("user")) {
+            if (!privilege.equals("admin")){
             HttpServletResponse httpResponse = (HttpServletResponse) response;
-            httpResponse.sendRedirect("login");
+            httpResponse.sendRedirect("notes");
             return;
+        }
         }
 
         // This will either call upon the next filter in the chain,
@@ -38,6 +40,8 @@ public class AdminFilter implements Filter {
         chain.doFilter(request, response);
         
         // any code after chain.doFilter will be executed after the servlet, during the response
+       
+        
     }
     
     @Override
